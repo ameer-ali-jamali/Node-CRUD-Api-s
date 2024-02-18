@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const User = require("./models/User");
 const multer = require("multer");
+const cors = require("cors");
 
 const app = express();
 const port = 3000;
@@ -12,7 +13,9 @@ mongoose.connect("mongodb://localhost:27017/employeesDb", {
   useUnifiedTopology: true,
 });
 
-const userStorage = multer.diskStorage({
+app.use(cors());
+
+const employeeStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./uploads");
   },
@@ -21,9 +24,10 @@ const userStorage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: userStorage });
+const upload = multer({ storage: employeeStorage });
 
 app.use(upload.any());
+app.use("/uploads", express.static("uploads"));
 
 app.use(bodyParser.json());
 
@@ -31,12 +35,12 @@ app.use(bodyParser.json());
 
 // Create
 
-app.post("/users", async (req, res) => {
+app.post("/employee", async (req, res) => {
   try {
-    const { name, email, password, profilePic, phone } = req.body;
+    const { name, email, password, profilePic, role } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser && existingUser.email) {
-      return res.status(400).json({
+      return res.json({
         status: false,
         message: "Email already exists. Please choose a different email.",
       });
@@ -46,10 +50,10 @@ app.post("/users", async (req, res) => {
       email,
       password,
       profilePic,
-      phone,
+      role,
     };
     if (req.files && req.files.length > 0) {
-      userFields.profilePic = "./uploads/" + req.files[0].filename;
+      userFields.profilePic = "/uploads/" + req.files[0].filename;
     }
     const user = new User(userFields);
     await user.save();
@@ -68,13 +72,13 @@ app.post("/users", async (req, res) => {
 });
 
 // Read all
-app.get("/getAllUsers", async (req, res) => {
+app.get("/employee", async (req, res) => {
   try {
-    const users = await User.find({});
+    const employee = await User.find({});
     res.json({
       status: true,
       message: "Data fetched successfully",
-      data: users,
+      data: employee,
     });
   } catch (error) {
     res.status(500).json({
@@ -86,7 +90,7 @@ app.get("/getAllUsers", async (req, res) => {
 });
 
 // Read one
-app.get("/users/:id", async (req, res) => {
+app.get("/employee/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     res.json({
@@ -104,18 +108,45 @@ app.get("/users/:id", async (req, res) => {
 });
 
 // Update
-app.put("/users/:id", async (req, res) => {
+app.post("/employee/:id", async (req, res) => {
   try {
-    const data = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, data, {
-      new: true,
-    });
-    res.json({
-      status: true,
-      message: "Data updated successfully",
-      data: user,
-    });
+    const { name, email, password, role } = req.body;
+
+    if (!name || !email || !role) {
+      return res.status(400).json({
+        status: false,
+        message: "Name, email, and role are required fields.",
+      });
+    }
+
+    let profilePicPath = "";
+    if (req.files && req.files.length > 0) {
+      profilePicPath = "/uploads/" + req.files[0].filename;
+    }
+
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      user.name = name;
+      user.email = email;
+      user.role = role;
+      if (profilePicPath) {
+        user.profilePic = profilePicPath;
+      }
+      await user.save();
+      return res.json({
+        status: true,
+        message: "Data updated successfully",
+        data: user,
+      });
+    } else {
+      return res.status(404).json({
+        status: false,
+        message: "User not found",
+      });
+    }
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       status: false,
       message: "Failed to update data",
@@ -125,7 +156,7 @@ app.put("/users/:id", async (req, res) => {
 });
 
 // Delete
-app.delete("/users/:id", async (req, res) => {
+app.delete("/employee/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     res.json({

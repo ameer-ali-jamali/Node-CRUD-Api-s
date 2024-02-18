@@ -9,15 +9,15 @@ const UserModel = new mongoose.Schema(
       type: String,
       lowercase: true,
     },
-    phone: {
-      type: String,
-    },
     password: {
       type: String,
     },
     profilePic: {
       type: String,
       default: "",
+    },
+    role: {
+      type: String,
     },
     isActive: {
       type: Boolean,

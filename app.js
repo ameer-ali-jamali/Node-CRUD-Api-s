@@ -59,7 +59,6 @@ app.post("/users", async (req, res) => {
       data: user,
     });
   } catch (error) {
-    // Handle errors
     res.status(500).json({
       status: false,
       message: "Failed to create data",

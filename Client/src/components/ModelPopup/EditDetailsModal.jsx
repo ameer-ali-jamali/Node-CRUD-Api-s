@@ -13,17 +13,16 @@ const EditDetailsModal = ({ showModal, closeModal, empById, setEditModal }) => {
 
   const formikFormData = useFormik({
     initialValues: {
-      name: empById?.name,
-      email: empById?.email,
+      name: name,
+      email: email,
       profilePic: null,
-      password: empById?.password,
-      role: empById?.role,
+      password: password,
+      role: role,
     },
     onSubmit: (values) => {
       handleUpdate(values);
     },
   });
-
   const {
     values,
     setValues,
@@ -33,6 +32,7 @@ const EditDetailsModal = ({ showModal, closeModal, empById, setEditModal }) => {
     resetForm,
     handleSubmit,
   } = formikFormData;
+  console.log(values);
 
   console.log(formikFormData);
 
@@ -90,7 +90,7 @@ const EditDetailsModal = ({ showModal, closeModal, empById, setEditModal }) => {
                         type="text"
                         name="name"
                         required
-                        defaultValue={name}
+                        defaultValue={values?.name}
                         onChange={handleChange}
                         values={values?.name}
                       />
@@ -111,7 +111,7 @@ const EditDetailsModal = ({ showModal, closeModal, empById, setEditModal }) => {
                         type="email"
                         name="email"
                         required
-                        defaultValue={email}
+                        defaultValue={values?.email}
                         onChange={handleChange}
                         values={values?.email}
                       />
@@ -122,7 +122,7 @@ const EditDetailsModal = ({ showModal, closeModal, empById, setEditModal }) => {
                         type="text"
                         name="password"
                         required
-                        defaultValue={password}
+                        defaultValue={values?.password}
                         onChange={handleChange}
                         values={values?.password}
                       />
@@ -134,6 +134,7 @@ const EditDetailsModal = ({ showModal, closeModal, empById, setEditModal }) => {
                       type="text"
                       name="role"
                       required
+                      defaultValue={values?.role}
                       onChange={handleChange}
                       values={values?.role}
                     />
@@ -144,6 +145,7 @@ const EditDetailsModal = ({ showModal, closeModal, empById, setEditModal }) => {
                       type="text"
                       name="createdAt"
                       required
+                      defaultValue={moment(createdAt).format("LLL")}
                       onChange={handleChange}
                       value={moment(createdAt).format("LLL")}
                       disabled

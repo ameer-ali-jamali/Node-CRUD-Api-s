@@ -51,7 +51,8 @@ The API will be running at `http://localhost:3000`.
     "name": "John Doe",
     "email": "john.doe@example.com",
     "password": "secretpassword",
-    "phone": "123-456-7890"
+    "phone": "123-456-7890",
+    "profilePic": "/directory/image.jpg"
   }
   ```
 - **Response:**
@@ -63,7 +64,8 @@ The API will be running at `http://localhost:3000`.
       "_id": "1234567890",
       "name": "John Doe",
       "email": "john.doe@example.com",
-      "phone": "123-456-7890"
+      "phone": "123-456-7890",
+      "profilePic": "/directory/image.jpg"
     }
   }
   ```
@@ -80,7 +82,8 @@ The API will be running at `http://localhost:3000`.
         "_id": "1234567890",
         "name": "John Doe",
         "email": "john.doe@example.com",
-        "phone": "123-456-7890"
+        "phone": "123-456-7890",
+        "profilePic": "/directory/image.jpg"
       }
       // Additional users...
     ]
@@ -98,7 +101,8 @@ The API will be running at `http://localhost:3000`.
       "_id": "1234567890",
       "name": "John Doe",
       "email": "john.doe@example.com",
-      "phone": "123-456-7890"
+      "phone": "123-456-7890",
+      "profilePic": "/directory/image.jpg"
     }
   }
   ```
@@ -122,7 +126,8 @@ The API will be running at `http://localhost:3000`.
       "_id": "1234567890",
       "name": "Updated Name",
       "email": "john.doe@example.com",
-      "phone": "987-654-3210"
+      "phone": "987-654-3210",
+      "profilePic": "/directory/image.jpg"
     }
   }
   ```
@@ -139,7 +144,8 @@ The API will be running at `http://localhost:3000`.
       "_id": "1234567890",
       "name": "Updated Name",
       "email": "john.doe@example.com",
-      "phone": "987-654-3210"
+      "phone": "987-654-3210",
+      "profilePic": "/directory/image.jpg"
     }
   }
   ```
